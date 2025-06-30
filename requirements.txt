@@ -1,1 +1,3 @@
-pip freeze > requirements.txt
+python-telegram-bot
+emoji
+requests
