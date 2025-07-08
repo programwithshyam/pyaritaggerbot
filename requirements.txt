@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 telethon==1.40.0
 python-dotenv==1.1.0
+=======
+telethon==1.28.5
+>>>>>>> 0343415f59d0a3dd6de69e51a942e014834b4040
