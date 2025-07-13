@@ -5,6 +5,7 @@ from telethon import TelegramClient, events
 from telethon.tl.types import ChannelParticipantsAdmins, UserStatusRecently, UserStatusOnline
 import os
 from dotenv import load_dotenv
+from flask import Flask
 
 # Load environment variables
 load_dotenv()
@@ -31,6 +32,7 @@ processing_messages = {}
 
 # Emoji configuration
 EMOJI_POOL = [
+    
     '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', 
     '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '🤪', '😜',
     '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤨', '😐', '😑', '😶',
@@ -207,6 +209,13 @@ async def handle_tag_close(event, client):
         except Exception as e:
             logger.error(f"Error deleting processing message: {e}")
 
+# Initialize Flask app
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return "Bot is running!"
+
 async def main():
     """Main function to start the bot"""
     client = TelegramClient('tagbot', API_ID, API_HASH)
@@ -235,6 +244,10 @@ if __name__ == '__main__':
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
+        # Start the Flask app in a separate thread
+        from threading import Thread
+        Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': int(os.environ.get("PORT", 5000))}).start()
+        
         loop.run_until_complete(main())
     except KeyboardInterrupt:
         logger.info("Bot stopped by user")
